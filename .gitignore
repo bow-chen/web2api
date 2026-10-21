@@ -1,0 +1,18 @@
+# 依赖与虚拟环境
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# PyInstaller 构建产物（exe 通过 Release 分发，不进仓库）
+build/
+dist/
+*.spec
+
+# IDE
+.idea/
+.vscode/
+
+# 敏感配置：含真实 token，严禁提交！
+# 用户首次运行会自动生成自己的 config.yaml
+config.yaml
