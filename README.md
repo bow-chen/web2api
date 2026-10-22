@@ -23,7 +23,7 @@ Python + FastAPI，无 GUI、无账号池。当前实现了 DeepSeek 适配器�
 
 | 文件 | 作用 |
 |------|------|
-| `server.py` | 入口。FastAPI 服务器，暴露 `/v1/chat/completions` `/v1/models` `/health` |
+| `server.py` | 入口。FastAPI 服务器，暴露 `/v1/chat/completions`、`/v1/messages`、`/v1/messages/count_tokens`、`/v1/models`、`/health` |
 | `deepseek.py` | DeepSeek 适配器。把 OpenAI 请求翻译成 DeepSeek 私有接口调用（换token→建会话→PoW→发对话→删会话） |
 | `sse.py` | 解析 DeepSeek 私有 SSE，抽出正文，转成 OpenAI chunk |
 | `pow.py` | DeepSeekHashV1 工作量证明求解（wasmtime 驱动官方 WASM，无 Node 依赖） |
@@ -81,6 +81,20 @@ Python + FastAPI，无 GUI、无账号池。当前实现了 DeepSeek 适配器�
 | 模型 | `DeepSeek-V4.1-Flash` 或 `deepseek-v4-pro`（在 config.yaml 的 `models` 里配置） |
 
 其他任何支持"自定义 OpenAI 接口"的工具（各类 Agent、IDE 插件、命令行工具）填法相同。
+
+**接入 Claude Code 等 Anthropic 协议客户端**
+web2api 已内置 Anthropic Messages API 兼容层（包含 `POST /v1/messages`、`POST /v1/messages/count_tokens` 与工具调用模拟）：
+- 设置环境变量：
+  ```bash
+  # Windows PowerShell
+  $env:ANTHROPIC_BASE_URL="http://127.0.0.1:8080"
+  $env:ANTHROPIC_API_KEY="111"   # 若 config.yaml 中 api_key 为空则随便填一个字符串
+  $env:ANTHROPIC_MODEL="DeepSeek-V4.1-Flash" # 或 deepseek-v4-pro，不设则自动回退到默认模型
+  ```
+- 启动 Claude Code：
+  ```bash
+  claude
+  ```
 
 **手动验证（可选，命令行）**
 ```bash
